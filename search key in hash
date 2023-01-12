@@ -1,0 +1,1 @@
+Location.find(3607).blackboxes.where(blackbox_type_id: [53,115]).first.sensors.to_h{ |x| [x.name, x.sensor_definition_id]}.select { |x,y| x.include?('volt') }]
