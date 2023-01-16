@@ -7,12 +7,9 @@ wget https://www.openssl.org/source/openssl-1.1.1g.tar.gz
 tar zxvf openssl-1.1.1g.tar.gz
 Once extracted, we need to configure where this version will be installed. In my case, I want it in a hidden folder in my home directory ~/.openssl/version
 
-cd openssl-1.1.1g
-./config --prefix=$HOME/.openssl/openssl-1.1.1g --openssldir=$HOME/.openssl/openssl-1.1.1g
-
+cd openssl-1.1.1g ./config --prefix=$HOME/.openssl/openssl-1.1.1g --openssldir=$HOME/.openssl/openssl-1.1.1g
 make
 make test
-
 make install
 As this doesn’t include any certificates, I just symlink the main OpenSSL certs folder into this version like so:
 
