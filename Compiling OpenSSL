@@ -1,0 +1,37 @@
+Compiling OpenSSL
+This guide assumes you’ve already got build-essential installed.
+
+Firstly download OpenSSL 1.1.1g and extract it:
+
+wget https://www.openssl.org/source/openssl-1.1.1g.tar.gz
+tar zxvf openssl-1.1.1g.tar.gz
+Once extracted, we need to configure where this version will be installed. In my case, I want it in a hidden folder in my home directory ~/.openssl/version
+
+cd openssl-1.1.1g
+./config --prefix=$HOME/.openssl/openssl-1.1.1g --openssldir=$HOME/.openssl/openssl-1.1.1g
+
+make
+make test
+
+make install
+As this doesn’t include any certificates, I just symlink the main OpenSSL certs folder into this version like so:
+
+rm -rf ~/.openssl/openssl-1.1.1g/certs
+ln -s /etc/ssl/certs ~/.openssl/openssl-1.1.1g/certs
+Install Ruby
+Once OpenSSL 1.1.1g is installed, we can now install Ruby 2.5 but telling ruby-build to use this version of OpenSSL. In this example, I’m using asdf but it should work the same way with rbenv.
+
+# Ruby 3.0
+RUBY_CONFIGURE_OPTS=--with-openssl-dir=$HOME/.openssl/openssl-1.1.1g asdf install ruby 3.0.4
+
+# Ruby 2.7
+RUBY_CONFIGURE_OPTS=--with-openssl-dir=$HOME/.openssl/openssl-1.1.1g asdf install ruby 2.7.6
+
+# Ruby 2.6
+RUBY_CONFIGURE_OPTS=--with-openssl-dir=$HOME/.openssl/openssl-1.1.1g asdf install ruby 2.6.9
+
+# Ruby 2.5 (No Longer Supported)
+RUBY_CONFIGURE_OPTS=--with-openssl-dir=$HOME/.openssl/openssl-1.1.1g asdf install ruby 2.5.9
+
+# Ruby 2.4 (No Longer Supported)
+RUBY_CONFIGURE_OPTS=--with-openssl-dir=$HOME/.openssl/openssl-1.1.1g asdf install ruby 2.4.10
