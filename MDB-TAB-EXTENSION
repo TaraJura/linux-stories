@@ -2,12 +2,11 @@ Controller : redirect_to orders_root_path(confirmed: true), notice: t(:order_con
 #confirmed: true is our indentifier
 
 JavaScript:
-``
   const queryString = window.location.search; // url parameters
 
   if (queryString.includes('confirmed=true')) { 
       const tab = document.getElementById('orders-tab');  
       const tabTrigger = new mdb.Tab(tab) // initialize tab
       tabTrigger.show(); // show tab
-  }``
-  
+  }
+# it checks if the parameter 'confirmed=true' is there, if yes, show tab, easy can be modified with assigning ID of the tab etc.
