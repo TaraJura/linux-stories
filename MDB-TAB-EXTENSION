@@ -1,0 +1,13 @@
+Controller : redirect_to orders_root_path(confirmed: true), notice: t(:order_confirmed)
+#confirmed: true is our indentifier
+
+JavaScript:
+``
+  const queryString = window.location.search; // url parameters
+
+  if (queryString.includes('confirmed=true')) { 
+      const tab = document.getElementById('orders-tab');  
+      const tabTrigger = new mdb.Tab(tab) // initialize tab
+      tabTrigger.show(); // show tab
+  }``
+  
