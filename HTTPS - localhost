@@ -1,0 +1,64 @@
+1, First of all youll need to have easy-rsa
+sudo apt install easy-rsa
+
+2, Become root
+sudo su
+
+3, Go to the easy-rsa folder
+cd /usr/share/easy-rsa
+
+4, Copy example config file
+cp vars.example vars
+
+5, Open vars in your preffered text editor
+vi vars
+
+6, Uncomment these rows and fill in your values (CZ, Praha, Org. name...)
+set_var EASYRSA_REQ_COUNTRY "CZ"
+set_var EASYRSA_REQ_PROVINCE "Praha"
+set_var EASYRSA_REQ_CITY "Praha"
+set_var EASYRSA_REQ_ORG "Intel"
+set_var EASYRSA_REQ_EMAIL "ca@localhost"
+set_var EASYRSA_REQ_OU "Unit"
+
+7, Generate cert
+./easyrsa init-pki (type yes if required)
+./easyrsa build-ca (type password 2times, then type your server name)
+
+8, Copy cert to your home
+cp /usr/share/easy-rsa/pki/ca.crt ~ubuntu20/ (NOTE that ubuntu20 is my home, your will be different)
+sudo chmod +r ca.crt (run this command from user terminal (no root), it changes permissions from root to user.)
+
+9, Next command run from "/usr/share/easy-rsa" path
+!! IMPORTANT !! local.max.support is my server name, choose your own
+./easyrsa build-server-full local.max.support(type new password (2times) and then password we typed before)
+
+10, Redirect from port 3000 to 443 (HTTPS)
+sudo iptables -t nat -I OUTPUT -p tcp -d 127.0.0.1 --dport 443 -j REDIRECT --to-ports 3000
+
+11, Check if we make it correctly
+vi /etc/hosts
+
+127.0.0.1 localhost local.max.support (if your see this (with your server name), its probably correct.)
+
+Another test:
+ping local.max.support (If its responding GOOD JOB!)
+
+12, Import ca.crt from your home to the browser as a Authority
+In chrome:
+Settings -> privacy and security -> Security -> Manage certificates -> Authorities -> Import
+
+13, Move cert and key to your project /config
+cd /usr/share/easy-rsa/pki/certs_by_serial (here is your cert, rename it from "hash".pem to yourServerName.crt (In my case local.max.support.crt))
+
+cp local.max.support.crt ~ubuntu20/Desktop/centraldb-portal/config (COPY that file to your project /config)
+cd /usr/share/easy-rsa/pki/private (here is your key)
+cp local.max.support.key ~ubuntu20/Desktop/centraldb-portal/config (move key to your project)
+
+14, Change permissions from root to user (Open new user terminal)
+cd /Desktop/centraldb-portal/config (Go to your project config folder)
+sudo chmod +r local.max.support.crt (Change permissions)
+sudo chmod +r local.max.support.key (Change permissions)
+
+15, run your HTTPS server
+bin/dev -b "ssl://127.0.0.1:3000?cert=./config/local.max.support.crt&key=./config/local.max.support.key"(type cert password), (Dont forget to edit your .key, .crt files names)
