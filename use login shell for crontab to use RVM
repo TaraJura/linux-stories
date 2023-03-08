@@ -1,0 +1,1 @@
+* * * * * /bin/bash --login -c 'cd /home/novakj/Desktop/porfa && rvm use && bin/rails invoices:old_invoice_notif RAILS_ENV=development'
