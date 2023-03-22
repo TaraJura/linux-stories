@@ -1,0 +1,11 @@
+# Old db dump to json
+
+File.write("/tmp/users.json", User.all.map{|u| u.attributes}.to_json)
+
+
+
+# New DB load from json
+
+JSON.parse(File.read '/tmp/users.json').each do |user|
+  User.new(user).save(validate: false)
+end
