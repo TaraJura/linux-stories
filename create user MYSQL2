@@ -1,0 +1,5 @@
+sudo mysql
+CREATE USER 'novakj'@'localhost' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON openai_development.* TO 'novakj'@'localhost';
+
+
