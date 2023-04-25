@@ -1,0 +1,32 @@
+sudo su -
+
+apt update
+
+apt install certbot
+
+certbot certonly --nginx -d techtools.cz  # replace techtools with your domain
+
+sudo certbot certificates
+# these 2 lines are important for us
+#    Certificate Path: /etc/letsencrypt/live/isdoc.fun/fullchain.pem
+#    Private Key Path: /etc/letsencrypt/live/isdoc.fun/privkey.pem
+
+cd /etc/nginx/sites-enabled
+vi techtools.conf
+
+# replace ssl_certificates
+#server {
+#    listen 80;
+#    server_name techtools.cz;
+#    return 301 https://$server_name$request_uri;
+#}
+#server {
+#    listen       443 ssl;
+#    listen       [::]:443 ssl;
+#    server_name  techtools.cz;
+#    proxy_buffering off;
+#
+#    ssl_certificate      /etc/letsencrypt/live/techtools.cz/fullchain.pem;
+#    ssl_certificate_key  /etc/letsencrypt/live/techtools.cz/privkey.pem;
+
+systemctl restart nginx.service
