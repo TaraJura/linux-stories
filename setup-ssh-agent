@@ -1,11 +1,10 @@
 # generate key
-```ssh-keygen -t ed25519 -C "your_email@example.com"```
+ssh-keygen -t ed25519 -C "your_email@example.com"
 
-# from your root
-
-```vi .profile```
+# from your root 
+vi .profile
 
 # paste there this lines of code 
 
-```eval `ssh-agent -s`
-ssh-add ~/.ssh/id_rsa```
+eval `ssh-agent -s`
+ssh-add ~/.ssh/id_rsa
