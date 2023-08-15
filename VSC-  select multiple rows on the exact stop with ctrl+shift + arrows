@@ -1,0 +1,26 @@
+Use in VSC - Ctrl + Shift + P  and type: "Open Keyboard Shortcuts (JSON)"
+
+and paste there this json:
+
+[
+    {
+        "key": "ctrl+shift+right",
+        "command": "cursorColumnSelectRight",
+        "when": "textInputFocus"
+    },
+    {
+        "key": "ctrl+shift+left",
+        "command": "cursorColumnSelectLeft",
+        "when": "textInputFocus"
+    },
+    {
+        "key": "ctrl+shift+up",
+        "command": "cursorColumnSelectUp",
+        "when": "textInputFocus"
+    },
+    {
+        "key": "ctrl+shift+down",
+        "command": "cursorColumnSelectDown",
+        "when": "textInputFocus"
+    }
+]
