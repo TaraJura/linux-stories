@@ -1,0 +1,59 @@
+Libpcap is a popular library for packet capture and network analysis on Unix-like operating systems, including Linux. It provides a programming interface for capturing network packets and analyzing their content. Here's a high-level overview of how to use libpcap:
+
+Install libpcap:
+Make sure you have libpcap installed on your system. You can install it using your distribution's package manager. For example, on Debian-based systems, you can use:
+
+arduino
+Copy code
+sudo apt-get install libpcap-dev
+Include the Necessary Header:
+In your C or C++ program, include the libpcap header:
+
+c
+Copy code
+#include <pcap.h>
+Choose an Interface:
+You need to select the network interface from which you want to capture packets. You can use the pcap_lookupdev function to get the default interface or specify one manually.
+
+Open the Interface:
+Use the pcap_open_live function to open the selected interface for packet capture:
+
+c
+Copy code
+pcap_t *handle = pcap_open_live(interface, BUFSIZ, 1, 1000, errbuf);
+if (handle == NULL) {
+    fprintf(stderr, "Couldn't open device %s: %s\n", interface, errbuf);
+    return 2;
+}
+Compile a Filter (Optional):
+You can compile a packet filter using the pcap_compile function to capture specific types of packets based on filters. This step is optional but can be useful to narrow down captured packets.
+
+Set the Filter (Optional):
+Apply the compiled filter using the pcap_setfilter function:
+
+c
+Copy code
+struct bpf_program fp;
+if (pcap_compile(handle, &fp, filter_exp, 0, PCAP_NETMASK_UNKNOWN) == -1) {
+    fprintf(stderr, "Couldn't parse filter %s: %s\n", filter_exp, pcap_geterr(handle));
+    return 2;
+}
+if (pcap_setfilter(handle, &fp) == -1) {
+    fprintf(stderr, "Couldn't install filter %s: %s\n", filter_exp, pcap_geterr(handle));
+    return 2;
+}
+Capture Packets:
+Use the pcap_loop function to capture packets in a loop:
+
+c
+Copy code
+pcap_loop(handle, num_packets, packet_handler, NULL);
+The packet_handler function is a callback that is called for each captured packet.
+
+Close the Capture:
+After you're done capturing packets, close the capture handle:
+
+c
+Copy code
+pcap_close(handle);
+Remember that using packet capture tools and libraries like libpcap should be done responsibly and ethically. Always ensure that you have the necessary permissions before capturing and analyzing network traffic.
