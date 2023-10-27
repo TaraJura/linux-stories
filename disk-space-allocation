@@ -1,3 +1,33 @@
-```pvresize /dev/sda2```
+In the Linux Logical Volume Manager (LVM), the storage architecture is abstracted into layers to offer more flexibility over plain disk partitions. Let's look at these layers:
 
+Physical Volumes (PVs)
+Physical Volumes are essentially block storage devices that may be a whole disk (/dev/sda), a disk partition (/dev/sda1), or even a RAID device. These devices serve as the basic building blocks in an LVM-managed storage pool. You start by designating one or more devices as Physical Volumes.
 
+Commands:
+
+Initialize a disk or partition for use by LVM: pvcreate /dev/sda1
+Display attributes of PVs: pvdisplay
+Volume Groups (VGs)
+A Volume Group consists of one or more Physical Volumes. You can think of a VG as a pool of disk space out of which Logical Volumes can be allocated. A VG can be extended by adding more PVs to it, or reduced by removing existing PVs (assuming they are not in use).
+
+Commands:
+
+Create a VG: vgcreate my_volume_group /dev/sda1 /dev/sdb1
+Extend a VG: vgextend my_volume_group /dev/sdc1
+Display VG information: vgdisplay
+Logical Volumes (LVs)
+Logical Volumes are the LVM equivalent of disk partitions. Unlike traditional disk partitions, LVs are flexible and resizable. They are carved out from the disk space available in a Volume Group and can span multiple Physical Volumes if needed. You can put a filesystem on an LV just like you would with a regular disk partition.
+
+Commands:
+
+Create an LV: lvcreate -L 10G -n my_logical_volume my_volume_group
+Extend an LV: lvextend -L +5G /dev/my_volume_group/my_logical_volume
+Reduce an LV: lvreduce -L -5G /dev/my_volume_group/my_logical_volume
+Display LV information: lvdisplay
+The true power of LVM comes from its ability to manage storage in a flexible and abstract manner. You can:
+
+Increase or decrease the size of Logical Volumes in real-time
+Move Logical Volumes between Physical Volumes
+Take snapshots of Logical Volumes
+Striping or mirroring Logical Volumes across multiple Physical Volumes
+This architecture is especially useful in environments where storage needs can change dynamically, allowing administrators to adapt without resorting to complex and risky disk partitioning schemes.
