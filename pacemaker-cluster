@@ -1,0 +1,56 @@
+Pacemaker cluster
+Pacemaker je správcem zdrojů, jenž ve spolupráci s dalšími nástroji, jako je např. Corosync, slouží k vytváření a provozování clusterů s vysokou dostupností (HA).
+
+Tento nástroj využíváme např. pro tvorbu failover DB clusterů na bázi MSSQL.
+
+TODO: vysvětlit princip funkce
+
+Rychlé how-to pro MSSQL DB cluster
+Failover cluster funguje tak, že DB engine běží jen na jednom ze dvou nodů clusteru pod správou Pacemakeru.
+
+Stav clusteru zjistíme příkazem crm status:
+
+user@svud00001:~ $ sudo crm status
+Cluster Summary:
+  * Stack: corosync
+  * Current DC: svud00002 (version 2.0.3-4b1f869f0f) - partition with quorum
+  * Last updated: Tue Jun  6 13:02:37 2023
+  * Last change:  Thu May 25 21:55:01 2023 by root via cibadmin on svud00001
+  * 2 nodes configured
+  * 2 resource instances configured
+
+Node List:
+  * Online: [ svud00001 svud00002 ]
+
+Full List of Resources:
+  * Resource Group: HA:
+    * vipIP	(ocf::heartbeat:IPaddr2):	 Started svud00001
+    * mssqldb	(ocf::mssql:fci):	 Started svud00001
+Z tohoto výpisu se dozvíme, že tento cluster je tvořen celkem 2 nody, které jsou oba momentálně funkční (Node List). Cluster aktuálně řídí nod svud00002 (Current DC - Designated Controller), což znamená, že na tomto nodu běží procesy, které hlídají stav clusteru a v případě, že tento node selže (pád, restart...), přesune se řízení automaticky na druhý node. Cluster obsluhuje dva zdroje či služby (Resources): vipIP jako virtuální IP adresu celého clusteru, která podle se automaticky migruje mezi nody podle toho, kde právě běží DB engine, a mssqldb, což je samotný DB server. Jak vidíme, obě služby aktuálně běží na nodu svud00001.
+
+Pokud potřebujeme DB cluster (nebo i jen jeden z jeho nodů) rebootovat, je potřeba to udělat řízeně a postupně. Rebootovat lze neaktivní node, tzn. ten, na kterém právě DB neběží (v tomto případě to bude svud00002). Jakmile bude node rebootován a ve stavu online (viz crm status), lze na něj přemigrovat DB službu z aktivního node:
+
+user@svud00001:~ $ sudo crm resource move mssqldb svud00002
+INFO: Move constraint created for mssqldb to svud00002
+
+user@svud00001:~ $ sudo crm status
+Cluster Summary:
+  * Stack: corosync
+  * Current DC: svud00002 (version 2.0.3-4b1f869f0f) - partition with quorum
+  * Last updated: Tue Jun  6 13:17:05 2023
+  * Last change:  Tue Jun  6 13:16:11 2023 by root via crm_resource on svud00001
+  * 2 nodes configured
+  * 2 resource instances configured
+
+Node List:
+  * Online: [ svud00001 svud00002 ]
+
+Full List of Resources:
+  * Resource Group: HA:
+    * vipIP	(ocf::heartbeat:IPaddr2):	 Started svud00002
+    * mssqldb	(ocf::mssql:fci):	 Started svud00002
+Proces migrace trvá několik sekund a je dokončen, jakmile jsou oba zdroje ve stavu Started. Poté je možné již neaktivní node restartovat.
+
+Pokud je potřeba DB server z nějakého důvodu např. restartovat, nedělá se to prostřednictvím obvyklého systemctl restart mssql.service! Je nutné použít příkaz crm resource restart mssqldb, protože DB engine je pod správou Pacemakeru.
+
+Někdy se může stát, že správce clusteru ztratí přehled o stavu služeb, např. po restartu VM nebo po pádu DB engine. V takovém případě příkaz crm status vypisuje některou z chybových hlášek ohledně stavu služby a obvykle pomůže znovunačtení stavu clusteru příkazem crm resouce refresh.
