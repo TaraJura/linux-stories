@@ -1,0 +1,12 @@
+ 1980  wget https://storage.googleapis.com/chrome-for-testing-public/122.0.6261.57/linux64/chromedriver-linux64.zip
+ 1981  unzip chromedriver-linux64.zip
+ 1982  sudo mv chromedriver /usr/local/bin/
+ 1983  ls
+ 1984  chromedriver --version
+ 1985  '
+ 1986  cd chromedriver-linux64
+ 1987  sudo mv chromedriver /usr/local/bin/
+ 1988  chromedriver --version
+ 1989  cd ..
+ 1990  rm -r chromedriver-linux64 chromedriver-linux64.zip
+ 1991  ls
