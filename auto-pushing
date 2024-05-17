@@ -1,0 +1,3 @@
+vim .bashrc
+
+alias pipe="git add . && git commit -m 'Automatic Pipeline Commit(sorry)' && git push"
