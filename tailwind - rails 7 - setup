@@ -1,0 +1,17 @@
+# NEW PROJECT
+
+rails new my-project --css tailwind
+
+# Existing project
+
+https://tailwindcss.com/docs/guides/ruby-on-rails
+
+
+
+###########################################
+.bin/dev  # it will run Procfile.dev
+
+# or run 
+
+web: bin/rails server
+css: bin/rails tailwindcss:watch
