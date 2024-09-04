@@ -1,0 +1,3 @@
+# Drop table
+ActiveRecord::Base.connection.drop_table :ai_prompts if ActiveRecord::Base.connection.table_exists? :ai_prompts
+
