@@ -1,0 +1,3 @@
+I use: alias fuck='sudo $(fc -ln -1)'
+
+Which repeat the last command with sudo
