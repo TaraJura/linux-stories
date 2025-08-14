@@ -1,5 +1,5 @@
 # generate key
-ssh-keygen -t ed25519 -C "your_email@example.com"
+ssh-keygen -t ed25519 -C "jirkanovakneda11@seznam.cz"
 
 # from your root 
 vim .profile
