@@ -1,0 +1,1 @@
+novakj@win11:~/techtools-files$ scp -r ~/techtools-files/* techtools.cz:/
