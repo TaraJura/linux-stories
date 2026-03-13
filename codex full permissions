@@ -1,4 +1,6 @@
 codex --sandbox danger-full-access
 
 
-` (or the `--dangerously-bypass-approvals-and-sandbox`
+or the `--dangerously-bypass-approvals-and-sandbox
+
+docs: https://developers.openai.com/codex/llms-full.txt?utm_source=chatgpt.com 
