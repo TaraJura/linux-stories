@@ -1,0 +1,10 @@
+openclaw config set tools.profile full
+openclaw gateway restart
+
+
+
+
+
+verify if u want 
+
+openclaw config get tools.profile
