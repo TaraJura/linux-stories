@@ -1,10 +1,5 @@
 openclaw config set tools.profile full
+openclaw config set tools.exec.security full
+openclaw config set tools.exec.ask off
+
 openclaw gateway restart
-
-
-
-
-
-verify if u want 
-
-openclaw config get tools.profile
