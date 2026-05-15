@@ -137,12 +137,6 @@ sudo tail -f /var/log/nginx/access.log
 sudo journalctl -u nginx --since "1 hour ago" | grep -i error
 ```
 
-### Apache equivalents
-```bash
-sudo apache2ctl configtest && sudo systemctl reload apache2
-sudo tail -f /var/log/apache2/error.log
-```
-
 ---
 
 ## TLS Certificates (Let's Encrypt)
